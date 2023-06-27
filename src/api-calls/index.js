@@ -1,7 +1,7 @@
 import axiosClient from '../config/axios'
 import axios from 'axios';
 
-//LISTAR
+//================== LISTAR
 export async function listAPI() {
 //1. Llama al Api y se obtiene la lista del json
   let result = await axios.get('https://jsonplaceholder.typicode.com/users').then((response) => {
@@ -10,15 +10,23 @@ export async function listAPI() {
   return result
 }
 
-
-export async function addProductDB(product) {
-  return await axiosClient.post('/products', product)
+//================== AGREGAR
+export async function agregarProductoAPI(product) {
+  return await axios.post('/products', product).then((response) => {
+    return response.data;
+  });
 }
 
-export async function deleteProductDB(id) {
-  return await axiosClient.delete(`/products/${id}`)
+//================== ELIMINAR
+export async function deleteProductoAPI(id) {
+  return await axios.delete(`/products/${id}`).then((response) => {
+    return response.data;
+  });
 }
 
-export async function editProductDB(product) {
-  return await axiosClient.put(`/products/${product.id}`, product)
+//================== EDITAR
+export async function editProductoAPI(product) {
+  return await axios.put(`/products/${product.id}`, product).then((response) => {
+    return response.data;
+  });
 }

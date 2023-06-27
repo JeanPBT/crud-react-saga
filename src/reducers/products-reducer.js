@@ -1,5 +1,5 @@
 import {
-  ADD_PRODUCT,
+  VARIABLE_AGREGAR_PRODUCTO,
   ADD_PRODUCT_OK,
   ADD_PRODUCT_ERROR,
   
@@ -7,11 +7,11 @@ import {
   VARIABLE_LISTA_PRODUCTO_RECOGE,
 
   PRODUCTS_DOWNLOAD_ERROR,
-  RETRIEVE_PRODUCT_DELETE,
+  VARIABLE_ELIMINAR_PRODUCTO,
   PRODUCT_DELETED_OK,
   PRODUCT_DELETED_ERROR,
   RETRIEVE_PRODUCT_EDIT,
-  BEGIN_EDIT_PRODUCT,
+  VARIABLE_EDITAR_PRODUCTO,
   PRODUCT_EDITED_OK,
   PRODUCT_EDITED_ERROR
 } from '../types'
@@ -28,8 +28,8 @@ export default function(state = initialState, action) {
   switch(action.type) {
 
     case VARIABLE_LISTA_PRODUCTO:
-    case ADD_PRODUCT:
-    case BEGIN_EDIT_PRODUCT:
+    case VARIABLE_AGREGAR_PRODUCTO:
+    case VARIABLE_EDITAR_PRODUCTO:
       return {
         ...state,
         loading: action.payload,
@@ -60,7 +60,7 @@ export default function(state = initialState, action) {
         products: action.payload
       }
 
-    case RETRIEVE_PRODUCT_DELETE:
+    case VARIABLE_ELIMINAR_PRODUCTO:
       return {
         ...state,
         deleteProduct: action.payload

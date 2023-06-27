@@ -1,14 +1,14 @@
 import {
-  ADD_PRODUCT,
+  VARIABLE_AGREGAR_PRODUCTO,
   ADD_PRODUCT_ERROR,
   VARIABLE_LISTA_PRODUCTO,
   VARIABLE_LISTA_PRODUCTO_RECOGE,
   PRODUCTS_DOWNLOAD_ERROR,
-  RETRIEVE_PRODUCT_DELETE,
+  VARIABLE_ELIMINAR_PRODUCTO,
   PRODUCT_DELETED_OK,
   PRODUCT_DELETED_ERROR,
   RETRIEVE_PRODUCT_EDIT,
-  BEGIN_EDIT_PRODUCT,
+  VARIABLE_EDITAR_PRODUCTO,
   PRODUCT_EDITED_OK,
   PRODUCT_EDITED_ERROR
 } from '../types'
@@ -36,12 +36,12 @@ export const listarProductosCargar = () => store.dispatch(listaProductoCargarDat
 //6.Desde el saga se recoge la lista de arrays y este lo almacena en la ultima linea 
 export const listarProductosAction = products => store.dispatch(listaProductoRecoger(products))
 
-export const downloadProductsErrorAction = () => store.dispatch(downloadProductsError())
+export const listarProductosErrorAction = () => store.dispatch(downloadProductsError())
 
 
 // Create new products
-const addProduct = product => ({
-  type: ADD_PRODUCT,
+const agregarProductoSg = product => ({
+  type: VARIABLE_AGREGAR_PRODUCTO,
   payload: true,
   product: product
 })
@@ -56,16 +56,16 @@ const addProductError = state => ({
   payload: state
 })
 
-export const addProductAction = product => store.dispatch(addProduct(product))
+export const addProductAction = product => store.dispatch(agregarProductoSg(product))
 
-export const addProductOkAction = () => store.dispatch(addProductOk())
+export const agregarProductoAction = () => store.dispatch(addProductOk())
 
-export const addProductErrorAction = state => store.dispatch(addProductError(state))
+export const agregarProductosErrorAction = state => store.dispatch(addProductError(state))
 
 
 // Delete products
 const retrieveProductDelete = id => ({
-  type: RETRIEVE_PRODUCT_DELETE,
+  type: VARIABLE_ELIMINAR_PRODUCTO,
   payload: id
 })
 
@@ -80,7 +80,7 @@ const deleteProductError = () => ({
 
 export const deleteProductAction = id => store.dispatch(retrieveProductDelete(id))
 
-export const deleteProductOkAction = () => store.dispatch(deleteProductOk())
+export const deleteProductoAction = () => store.dispatch(deleteProductOk())
 
 export const deleteProductErrorAction = () => store.dispatch(deleteProductError())
 
@@ -92,7 +92,7 @@ const retrieveProductAction = product => ({
 })
 
 const editProduct = product => ({
-  type: BEGIN_EDIT_PRODUCT,
+  type: VARIABLE_EDITAR_PRODUCTO,
   product: product
 })
 

@@ -1,18 +1,18 @@
 import { put, takeEvery, all, call } from 'redux-saga/effects'
 import Swal from 'sweetalert2'
 import {
-  ADD_PRODUCT,
+  VARIABLE_AGREGAR_PRODUCTO,
   VARIABLE_LISTA_PRODUCTO,
-  RETRIEVE_PRODUCT_DELETE,
-  BEGIN_EDIT_PRODUCT,
+  VARIABLE_ELIMINAR_PRODUCTO,
+  VARIABLE_EDITAR_PRODUCTO,
 } from '../types'
 
 import {
   listarProductosAction,
-  downloadProductsErrorAction,
-  addProductOkAction,
-  addProductErrorAction,
-  deleteProductOkAction,
+  listarProductosErrorAction,
+  agregarProductoAction,
+  agregarProductosErrorAction,
+  deleteProductoAction,
   deleteProductErrorAction,
   editProductOkAction,
   editProductErrorAction
@@ -20,13 +20,14 @@ import {
 
 import {
   listAPI,
-  addProductDB,
-  deleteProductDB,
-  editProductDB
+  agregarProductoAPI,
+  deleteProductoAPI,
+  editProductoAPI
 } from '../api-calls'
 
- //LISTAR SAGA
- //2. LLama al Api y lo procesa en saga, verificando asi su acceso o no al sistema( es un middware)
+
+//===============================LISTAR ===============
+//2. LLama al Api y lo procesa en saga, verificando asi su acceso o no al sistema( es un middware)
 function* listarProductosSg() {
   try {
     const data = yield call(listAPI)
@@ -34,64 +35,24 @@ function* listarProductosSg() {
     //funcion "listarProductosAction"(todos los productos)
     yield listarProductosAction(data)
   } catch (error) {
-    yield put(downloadProductsErrorAction())
+    yield put(listarProductosErrorAction())
   }
 }
 
 //3. Lo registramos en saga a la funcion que proviene del punto 2
+// watcher saga
 function* listarProductosSaga() {
   yield takeEvery(VARIABLE_LISTA_PRODUCTO, listarProductosSg)
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Create new product
-// worker saga
-function* addProduct(action) {
+//============================== AGREGAR ==================
+function* agregarProductoSg(action) {
   const product = action.product
   try {
-    yield call(addProductDB, product)
-   /* const response = await axiosClient.post('/products', product)*/
-    yield addProductOkAction(product) // download actualized products
-      // Alert
+    yield call(agregarProductoAPI, product)
+    yield agregarProductoAction(product)
+
+    // ======= Mensage de Alert
     Swal.fire({
       title: 'Added!',
       text: 'The product has been added successfully',
@@ -99,28 +60,29 @@ function* addProduct(action) {
       confirmButtonColor: '#62a086'
     })
   } catch (error) {
-    yield addProductErrorAction(true)
+
+    yield agregarProductosErrorAction(true)
+
     Swal.fire({
       icon: 'error',
       title: 'Error',
       text: 'An error ocurred. Please, try it again.'
     })
+
   }
 }
 
 // watcher saga
-function* addProductSaga() {
-  yield takeEvery(ADD_PRODUCT, addProduct)
+function* agregarProductosSaga() {
+  yield takeEvery(VARIABLE_AGREGAR_PRODUCTO, agregarProductoSg)
 }
 
-
-// Delete product
-// worker saga
-function* deleteProduct(action) {
+//============================== ELIMINAR ==================
+function* deleteProductoSg(action) {
   const id = action.payload
   try {
-    yield call(deleteProductDB, id)
-    yield deleteProductOkAction()
+    yield call(deleteProductoAPI, id)
+    yield deleteProductoAction()
     Swal.fire({
       title: 'Deleted!',
       text: 'The product has been deleted.',
@@ -134,18 +96,17 @@ function* deleteProduct(action) {
 
 // watcher saga
 function* deleteProductSaga() {
-  yield takeEvery(RETRIEVE_PRODUCT_DELETE, deleteProduct)
+  yield takeEvery(VARIABLE_ELIMINAR_PRODUCTO, deleteProductoSg)
 }
 
 
-// Edit product
-// worker saga
-function* editProduct(action) {
+//============================== EDITAR ==================
+function* editarProductoSg(action) {
   const product = action.product
   try {
-    yield call(editProductDB, product)
+    yield call(editProductoAPI, product)
     yield editProductOkAction(product)
-     // Alert
+    // Alert
     Swal.fire({
       title: 'Updated!',
       text: 'The product has been updated.',
@@ -159,7 +120,7 @@ function* editProduct(action) {
 
 // watcher saga
 function* editProductSaga() {
-  yield takeEvery(BEGIN_EDIT_PRODUCT, editProduct)
+  yield takeEvery(VARIABLE_EDITAR_PRODUCTO, editarProductoSg)
 }
 
 // Export all sagas
@@ -167,7 +128,7 @@ export default function* rootSaga() {
   yield all([
     //4. Se coloca la funcion en el repositorio saga al final.
     listarProductosSaga(),
-    addProductSaga(),
+    agregarProductosSaga(),
     deleteProductSaga(),
     editProductSaga()
   ])
